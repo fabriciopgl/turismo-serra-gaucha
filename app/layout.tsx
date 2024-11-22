@@ -1,20 +1,8 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "../styles/globals.css";
 import Providers from "./providers";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "Comino",
@@ -22,8 +10,8 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/images/favicon.ico",
-        href: "/images/favicon.ico",
+        url: "/turismo-serra-gaucha/images/favicon.ico",
+        href: "/turismo-serra-gaucha/images/favicon.ico",
       },
     ],
   },
@@ -36,6 +24,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/turismo-serra-gaucha/images/favicon.ico" />
+      </head>
       <body>
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           <Header />

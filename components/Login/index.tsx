@@ -2,8 +2,9 @@ import { Button } from "@nextui-org/react";
 import axios from "axios";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useEffect } from "react";
-import { FaUser, FaWineGlassAlt } from "react-icons/fa";
+import { FaGoogle, FaUser, FaWineGlassAlt } from "react-icons/fa";
 import waterfall from "../../public/images/backgrounds/waterfall_background.jpg";
+import { GoogleIcon } from "./GoogleIcon";
 
 interface LoginComponentProps {
   onSuccess: (userObject: any) => void;
@@ -86,7 +87,38 @@ export default function LoginComponent({ onSuccess }: LoginComponentProps) {
         </div>
 
         {/* Div de sign-in */}
-        <div id="signInDiv" className="mt-10" />
+        {/* <div id="signInDiv" className="mt-10" /> */}
+        <Button
+          variant="bordered"
+          startContent={<GoogleIcon />}
+          className="w-full py-2 hover:bg-blue-50 hover:bg-opacity-80 border-[1px] border-[#dadce0] text-sm rounded-md flex justify-center items-center relative cursor-pointer mt-10"
+          onClick={() => {
+            const googleButton = document
+              .getElementById("signInDiv")
+              ?.querySelector("div");
+            if (googleButton) googleButton.click();
+          }}
+        >
+          {/* Botão do Google invisível */}
+          <div
+            id="signInDiv"
+            className="absolute inset-0 w-full h-full"
+            style={{
+              zIndex: 1,
+              opacity: 0, // Torna invisível
+              pointerEvents: "auto", // Permite clique programático
+            }}
+          />
+          {/* Botão customizado visível */}
+          <span
+            className="flex-1 text-center z-0"
+            style={{
+              fontFamily: "'Google Sans', Arial, sans-serif",
+            }}
+          >
+            Entrar com Google
+          </span>
+        </Button>
 
         {/* Separador */}
         <div className="flex items-center my-6">
