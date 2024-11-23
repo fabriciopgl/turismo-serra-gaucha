@@ -2,7 +2,7 @@ import { Button } from "@nextui-org/react";
 import axios from "axios";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useEffect } from "react";
-import { FaGoogle, FaUser, FaWineGlassAlt } from "react-icons/fa";
+import { FaUser, FaWineGlassAlt } from "react-icons/fa";
 import waterfall from "../../public/images/backgrounds/waterfall_background.jpg";
 import { GoogleIcon } from "./GoogleIcon";
 
@@ -50,7 +50,12 @@ export default function LoginComponent({ onSuccess }: LoginComponentProps) {
       window.google.accounts.id.initialize({
         client_id: googleClientId,
         callback: handleCredentialResponse,
+        auto_select: false,
+        cancel_on_tap_out: true,
       });
+
+      window.google.accounts.id.disableAutoSelect();
+
       window.google.accounts.id.renderButton(
         document.getElementById("signInDiv"),
         { theme: "outline", size: "large" }
@@ -92,12 +97,7 @@ export default function LoginComponent({ onSuccess }: LoginComponentProps) {
           variant="bordered"
           startContent={<GoogleIcon />}
           className="w-full py-2 hover:bg-blue-50 hover:bg-opacity-80 border-[1px] border-[#dadce0] text-sm rounded-md flex justify-center items-center relative cursor-pointer mt-10"
-          onClick={() => {
-            const googleButton = document
-              .getElementById("signInDiv")
-              ?.querySelector("div");
-            if (googleButton) googleButton.click();
-          }}
+          onClick={() => window.google.accounts.id.prompt()}
         >
           {/* Botão do Google invisível */}
           <div
