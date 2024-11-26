@@ -1,8 +1,7 @@
-// app/components/Card.tsx
-import { Button, Card, CardBody, Image } from "@nextui-org/react";
-import { HeartIcon } from "./HeartIcon";
-import { useState } from "react";
 import { useFavorites } from "@/contexts/FavoritePlacesContext";
+import { Button, Card, CardBody, Image } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { HeartIcon } from "./HeartIcon";
 
 type Props = {
   id: number;
@@ -19,6 +18,7 @@ export default function PlaceCard({
   imageUrl,
   favorite,
 }: Props) {
+  const router = useRouter();
   const { addFavorite, removeFavorite, favorites } = useFavorites();
   return (
     <Card className="w-80 h-90 mx-auto shadow-lg transition-transform transform-gpu hover:scale-105 active:scale-100 cursor-pointer">
@@ -35,7 +35,14 @@ export default function PlaceCard({
           {description}
         </section>
         <div className="flex flex-row justify-between items-center gap-2">
-          <Button className="mt-auto bg-green-800 text-white font-semibold py-2 rounded-lg transition-colors duration-300 hover:bg-green-700 w-full">
+          <Button
+            onClick={() => {
+              router.push(
+                `${process.env.NEXT_PUBLIC_PLACE_DETAILS_BASE_PATH}?placeId=${id}`
+              );
+            }}
+            className="mt-auto bg-green-800 text-white font-semibold py-2 rounded-lg transition-colors duration-300 hover:bg-green-700 w-full"
+          >
             Ver mais
           </Button>
           <Button
