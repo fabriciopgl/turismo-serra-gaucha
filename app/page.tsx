@@ -1,16 +1,19 @@
 "use client";
-import PlaceCard from "@/components/PlaceCard";
 import Filter from "@/components/Filters";
 import NavbarSearch from "@/components/NavbarSearch";
-
-import usePlaces, { Place } from "@/hooks/usePlaces";
-
+import PlaceCard from "@/components/PlaceCard";
+import { useAuth } from "@/contexts/AuthContext";
+import { useFavorites } from "@/contexts/FavoritePlacesContext";
+import { usePlacesContext } from "@/contexts/PlacesContext";
+import { Place } from "@/domains/Places/types";
 import { Button, Card, CardBody } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaSearch } from "react-icons/fa";
 
 export default function HomePage() {
-  const { places } = usePlaces();
+  const { user, isAnonymous } = useAuth();
+  const { favorites, fetchFavorites, isLoading } = useFavorites();
+  const { places, loading } = usePlacesContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredPlaces, setFilteredPlaces] = useState<Place[]>(places);
   const [searchValue, setSearchValue] = useState("");
@@ -45,6 +48,12 @@ export default function HomePage() {
     setCurrentPage(1);
   }, [searchValue, places]);
 
+  useEffect(() => {
+    if (user && !isAnonymous && favorites.length === 0)
+      fetchFavorites(user.internalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, isAnonymous]);
+
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
@@ -74,17 +83,37 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-8">
-          {currentPlaces.map((place) => (
-            <PlaceCard
-              key={place.id}
-              name={place.name}
-              imageUrl={place.image}
-              description={place.description}
-            />
-          ))}
+          {loading || isLoading
+            ? Array.from({ length: 9 }).map((_, index) => (
+                <Card
+                  key={index}
+                  className="w-80 h-90 mx-auto shadow-lg animate-pulse"
+                >
+                  <div className="bg-gray-300 h-[250px] w-full object-cover rounded-t-lg"></div>
+                  <CardBody className="flex flex-col h-full p-4">
+                    <div className="bg-gray-300 h-6 w-3/4 mb-4 rounded"></div>
+                    <div className="bg-gray-300 h-4 w-full mb-4 rounded"></div>
+                    <div className="bg-gray-300 h-4 w-5/6 rounded mb-4 flex-1"></div>
+                    <div className="flex flex-row justify-between items-center gap-2">
+                      <div className="bg-gray-300 h-10 w-full rounded-lg"></div>
+                      <div className="bg-gray-300 h-10 w-10 rounded-full"></div>
+                    </div>
+                  </CardBody>
+                </Card>
+              ))
+            : currentPlaces.map((place) => (
+                <PlaceCard
+                  key={place.id}
+                  id={place.id}
+                  name={place.name}
+                  imageUrl={place.image}
+                  description={place.description}
+                  favorite={favorites?.some((f) => f === place.id)}
+                />
+              ))}
         </div>
 
-        {currentPlaces.length > 0 ? (
+        {!loading && currentPlaces.length > 0 ? (
           <div className="flex justify-center items-center mt-8">
             <Button
               startContent={<FaArrowLeft />}

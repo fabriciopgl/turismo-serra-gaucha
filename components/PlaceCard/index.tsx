@@ -2,15 +2,24 @@
 import { Button, Card, CardBody, Image } from "@nextui-org/react";
 import { HeartIcon } from "./HeartIcon";
 import { useState } from "react";
+import { useFavorites } from "@/contexts/FavoritePlacesContext";
 
 type Props = {
+  id: number;
   name: string;
   description: string;
   imageUrl: string;
+  favorite: boolean;
 };
 
-export default function PlaceCard({ name, description, imageUrl }: Props) {
-  const [liked, setLiked] = useState(false);
+export default function PlaceCard({
+  id,
+  name,
+  description,
+  imageUrl,
+  favorite,
+}: Props) {
+  const { addFavorite, removeFavorite, favorites } = useFavorites();
   return (
     <Card className="w-80 h-90 mx-auto shadow-lg transition-transform transform-gpu hover:scale-105 active:scale-100 cursor-pointer">
       <Image
@@ -34,13 +43,21 @@ export default function PlaceCard({ name, description, imageUrl }: Props) {
             className="text-default-900/60 data-[hover]:bg-foreground/10"
             radius="full"
             variant="light"
-            onPress={() => setLiked((v) => !v)}
+            onPress={() => {
+              const isFavorite = favorites?.includes(id);
+
+              if (isFavorite) {
+                removeFavorite(id);
+              } else {
+                addFavorite(id);
+              }
+            }}
           >
             <HeartIcon
               className={
-                liked ? "[&>path]:stroke-transparent fill-red-500" : ""
+                favorite ? "[&>path]:stroke-transparent fill-red-500" : ""
               }
-              fill={liked ? "currentColor" : "none"}
+              fill={favorite ? "currentColor" : "none"}
               width={undefined}
               height={undefined}
             />

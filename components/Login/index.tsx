@@ -15,7 +15,7 @@ interface ExtendedJwtPayload extends JwtPayload {
 }
 
 export default function LoginComponent({ onSuccess }: LoginComponentProps) {
-  //This variables was previous set in environment variables on Netlify (only for production)
+  //This variables was previous set in environment variables on GitHub (only for production)
   // For development, you need to specify the value in .env.development
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_USER_SCRIPT_URL!;
