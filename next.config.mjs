@@ -2,7 +2,7 @@
 
 const nextConfig = {
   output: 'export',
-  trailingSlash: false,
+  trailingSlash: true,
   basePath: '/turismo-serra-gaucha', 
   assetPrefix: '/turismo-serra-gaucha',
 }
