@@ -37,9 +37,7 @@ export default function PlaceCard({
         <div className="flex flex-row justify-between items-center gap-2">
           <Button
             onClick={() => {
-              router.push(
-                `${process.env.NEXT_PUBLIC_PLACE_DETAILS_BASE_PATH}?placeId=${id}`
-              );
+              router.push(`/detalhes?placeId=${id}`);
             }}
             className="mt-auto bg-green-800 text-white font-semibold py-2 rounded-lg transition-colors duration-300 hover:bg-green-700 w-full"
           >
