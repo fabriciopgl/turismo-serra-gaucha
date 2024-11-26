@@ -1,4 +1,3 @@
-// app/routes/about/page.tsx
 export default function FavoritesPage() {
   return (
     <div className="container mx-auto p-4">

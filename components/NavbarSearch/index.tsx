@@ -1,7 +1,5 @@
-import usePlaces from "@/hooks/usePlaces";
 import { Input } from "@nextui-org/input";
 import { Kbd } from "@nextui-org/kbd";
-import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
 interface NavbarSearchProps {

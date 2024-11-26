@@ -27,6 +27,8 @@ jobs:
         env:
           NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           NEXT_PUBLIC_GOOGLE_USER_SCRIPT_URL: ${{ secrets.GOOGLE_USER_SCRIPT_URL }}
+          NEXT_PUBLIC_GOOGLE_PLACES_SCRIPT_URL: ${{ secrets.GOOGLE_PLACES_SCRIPT_URL }}
+          NEXT_PUBLIC_GOOGLE_FAVORITE_PLACES_SCRIPT_URL: ${{ secrets.GOOGLE_FAVORITE_PLACES_SCRIPT_URL }}
         run: yarn build
 
       - name: Deploy to GitHub Pages
