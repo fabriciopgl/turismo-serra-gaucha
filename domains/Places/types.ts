@@ -7,3 +7,12 @@ export type Place = {
   image: string;
   type: PlaceType[];
 };
+
+interface CarouselImage {
+  carouselImages: string[];
+}
+
+export interface PlaceDetails extends CarouselImage {
+  placeId: string;
+  location: string;
+}
