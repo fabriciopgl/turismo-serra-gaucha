@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/react";
 import axios from "axios";
 import { jwtDecode, JwtPayload } from "jwt-decode";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaUser, FaWineGlassAlt } from "react-icons/fa";
 import waterfall from "../../public/images/backgrounds/waterfall_background.jpg";
 import { GoogleIcon } from "./GoogleIcon";
@@ -15,6 +15,7 @@ interface ExtendedJwtPayload extends JwtPayload {
 }
 
 export default function LoginComponent({ onSuccess }: LoginComponentProps) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   //This variables was previous set in environment variables on GitHub (only for production)
   // For development, you need to specify the value in .env.development
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -91,54 +92,72 @@ export default function LoginComponent({ onSuccess }: LoginComponentProps) {
           <span style={{ fontFamily: "'Lustria', sans-serif" }}>Comino</span>
         </div>
 
-        {/* Div de sign-in */}
-        {/* <div id="signInDiv" className="mt-10" /> */}
-        <Button
-          variant="bordered"
-          startContent={<GoogleIcon />}
-          className="w-full py-2 hover:bg-blue-50 hover:bg-opacity-80 border-[1px] border-[#dadce0] text-sm rounded-md flex justify-center items-center relative cursor-pointer mt-10"
-          onClick={() => window.google.accounts.id.prompt()}
-        >
-          {/* Botão do Google invisível */}
-          <div
-            id="signInDiv"
-            className="absolute inset-0 w-full h-full"
-            style={{
-              zIndex: 1,
-              opacity: 0, // Torna invisível
-              pointerEvents: "auto", // Permite clique programático
-            }}
-          />
-          {/* Botão customizado visível */}
-          <span
-            className="flex-1 text-center z-0"
-            style={{
-              fontFamily: "'Google Sans', Arial, sans-serif",
-            }}
-          >
-            Entrar com Google
-          </span>
-        </Button>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-24">
+            <div className="w-10 h-10 border-t-2 border-blue-500 border-solid rounded-full animate-spin" />
+          </div>
+        ) : (
+          // Caso contrário, mostrar o conteúdo original
+          <>
+            <Button
+              variant="bordered"
+              startContent={<GoogleIcon />}
+              className="w-full py-2 hover:bg-blue-50 hover:bg-opacity-80 border-[1px] border-[#dadce0] text-sm rounded-md flex justify-center items-center relative cursor-pointer mt-10"
+              onClick={() => {
+                setIsLoading(true);
+                window.google.accounts.id.prompt();
+              }}
+            >
+              {/* Botão do Google invisível */}
+              <div
+                id="signInDiv"
+                className="absolute inset-0 w-full h-full"
+                style={{
+                  zIndex: 1,
+                  opacity: 0, // Torna invisível
+                  pointerEvents: "auto", // Permite clique programático
+                }}
+              />
+              {/* Botão customizado visível */}
+              <span
+                className="flex-1 text-center z-0"
+                style={{
+                  fontFamily: "'Google Sans', Arial, sans-serif",
+                }}
+                onClick={() => {
+                  setIsLoading(true);
+                }}
+              >
+                Entrar com Google
+              </span>
+            </Button>
 
-        {/* Separador */}
-        <div className="flex items-center my-6">
-          <hr className="flex-1 border-t border-gray-300" />
-          <span className="mx-4 text-gray-500">ou</span>
-          <hr className="flex-1 border-t border-gray-300" />
-        </div>
+            {/* Separador */}
+            <div className="flex items-center my-6">
+              <hr className="flex-1 border-t border-gray-300" />
+              <span className="mx-4 text-gray-500">ou</span>
+              <hr className="flex-1 border-t border-gray-300" />
+            </div>
 
-        {/* Botão para acessar sem login */}
-        <Button
-          startContent={<FaUser />}
-          onClick={() => onSuccess("anonymous")}
-          variant="bordered"
-          className="w-full py-2 hover:bg-blue-50 hover:bg-opacity-80 border-[1px] border-[#dadce0] text-sm rounded-md"
-          style={{
-            fontFamily: "'Google Sans', Arial, sans-serif",
-          }}
-        >
-          <span className="flex-1 text-center">Acessar sem fazer login</span>
-        </Button>
+            {/* Botão para acessar sem login */}
+            <Button
+              startContent={<FaUser />}
+              onClick={() => {
+                setIsLoading(true);
+                onSuccess("anonymous");
+              }}
+              variant="bordered"
+              className="w-full py-2 hover:bg-blue-50 hover:bg-opacity-80 border-[1px] border-[#dadce0] text-sm rounded-md"
+              style={{
+                fontFamily: "'Google Sans', Arial, sans-serif",
+              }}
+            >
+              <span className="flex-1 text-center">
+                Acessar sem fazer login
+              </span>
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

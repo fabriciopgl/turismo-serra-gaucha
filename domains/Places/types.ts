@@ -15,4 +15,6 @@ interface CarouselImage {
 export interface PlaceDetails extends CarouselImage {
   placeId: string;
   location: string;
+  locationCoordinates: string;
+  description: string;
 }
