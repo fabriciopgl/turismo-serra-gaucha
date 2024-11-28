@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import type { Metadata } from "next";
+import "leaflet/dist/leaflet.css";
 import "../styles/globals.css";
 import Providers from "./providers";
 

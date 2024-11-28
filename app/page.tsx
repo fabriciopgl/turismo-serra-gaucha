@@ -13,7 +13,7 @@ import { FaArrowLeft, FaArrowRight, FaSearch } from "react-icons/fa";
 export default function HomePage() {
   const { user, isAnonymous } = useAuth();
   const { favorites, fetchFavorites, isLoading } = useFavorites();
-  const { places, loading } = usePlacesContext();
+  const { filteredPlaces: places, loading } = usePlacesContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredPlaces, setFilteredPlaces] = useState<Place[]>(places);
   const [searchValue, setSearchValue] = useState("");
@@ -82,7 +82,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 pt-8">
           {loading || isLoading
             ? Array.from({ length: 9 }).map((_, index) => (
                 <Card

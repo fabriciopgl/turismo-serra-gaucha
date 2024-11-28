@@ -1,10 +1,11 @@
-"use client";
+import { createContext, useContext, useState, useEffect } from "react";
 import { Place, PlaceDetails } from "@/domains/Places/types";
 import axios from "axios";
-import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface PlacesContextType {
   places: Place[];
+  filteredPlaces: Place[];
+  setFilteredPlaces: React.Dispatch<React.SetStateAction<Place[]>>;
   loading: boolean;
   error: string | null;
   placeDetails: PlaceDetails | undefined;
@@ -21,6 +22,7 @@ export const PlacesProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [places, setPlaces] = useState<Place[]>([]);
+  const [filteredPlaces, setFilteredPlaces] = useState<Place[]>(places);
   const [placeDetails, setPlaceDetails] = useState<PlaceDetails | undefined>(
     undefined
   );
@@ -38,6 +40,7 @@ export const PlacesProvider: React.FC<{ children: React.ReactNode }> = ({
         }
         const places = await response.json();
         setPlaces(places.data || []);
+        setFilteredPlaces(places.data || []); // Define os lugares filtrados inicialmente como todos os lugares
       } catch (err: unknown) {
         setError((err as Error).message);
       } finally {
@@ -64,7 +67,15 @@ export const PlacesProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <PlacesContext.Provider
-      value={{ places, placeDetails, loading, error, fetchPlaceDetails }}
+      value={{
+        places,
+        filteredPlaces,
+        setFilteredPlaces, // Expondo a função para atualizar os lugares filtrados
+        placeDetails,
+        loading,
+        error,
+        fetchPlaceDetails,
+      }}
     >
       {children}
     </PlacesContext.Provider>
