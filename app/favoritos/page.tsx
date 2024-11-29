@@ -56,6 +56,8 @@ export default function FavoritesPage() {
     setSearchValue(value);
   };
 
+  console.log(filteredPlaces);
+
   const userFavoritePlaces = useMemo(() => {
     return filteredPlaces.filter((p) => favorites.some((f) => f === p.id));
   }, [favorites, filteredPlaces]);
@@ -101,16 +103,19 @@ export default function FavoritesPage() {
               ))}
         </div>
 
-        {!favoritesLoading && !placesLoading && filteredPlaces.length === 0 && (
-          <div className="flex justify-center items-center mt-4">
-            <Card>
-              <CardBody className="flex flex-row justify-center items-center gap-2">
-                Nenhum resultado encontrado, tente pesquisar novamente{" "}
-                <FaSearch />
-              </CardBody>
-            </Card>
-          </div>
-        )}
+        {!favoritesLoading &&
+          !placesLoading &&
+          userFavoritePlaces.length === 0 &&
+          !isAnonymous && (
+            <div className="flex justify-center items-center mt-4">
+              <Card>
+                <CardBody className="flex flex-row justify-center items-center gap-2">
+                  Nenhum resultado encontrado, tente pesquisar novamente{" "}
+                  <FaSearch />
+                </CardBody>
+              </Card>
+            </div>
+          )}
       </div>
     </div>
   );
