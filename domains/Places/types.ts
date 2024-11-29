@@ -6,6 +6,7 @@ export type Place = {
   description: string;
   image: string;
   type: PlaceType[];
+  popularity: string;
 };
 
 interface CarouselImage {
