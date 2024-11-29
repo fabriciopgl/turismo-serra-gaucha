@@ -7,7 +7,7 @@ import useCoordinates from "@/hooks/useCoordinates";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FaMapPin } from "react-icons/fa";
+import { FaMapPin, FaStar } from "react-icons/fa";
 
 const PlaceDetailsPage: React.FC = () => {
   const [selectedPlace, setSelectedPlace] = useState<Place>();
@@ -91,6 +91,21 @@ const PlaceDetailsPage: React.FC = () => {
             />
           </div>
         )
+      )}
+
+      {loading || !placeDetails || !selectedPlace ? (
+        <div className="w-full h-[100px] bg-gray-200 animate-pulse rounded-lg mb-8"></div>
+      ) : (
+        <div className="w-full h-[100px] mb-8">
+          <div className="flex items-center space-x-2 mb-4">
+            <FaStar className="text-yellow-400 text-3xl" />
+            <span className="text-4xl font-bold">Avaliações</span>
+          </div>
+
+          <p className="text-lg mb-8 text-justify">
+            Esta funcionalidade estará disponível em breve!
+          </p>
+        </div>
       )}
     </div>
   );

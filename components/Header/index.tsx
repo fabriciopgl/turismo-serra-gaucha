@@ -151,7 +151,16 @@ export default function Header() {
               >
                 Preferências
               </DropdownItem>
-              <DropdownItem startContent={<FaQuestion />} key="help">
+              <DropdownItem
+                startContent={<FaQuestion />}
+                key="help"
+                onClick={() =>
+                  window.open(
+                    "https://github.com/fabriciopgl/turismo-serra-gaucha/blob/main/README.md",
+                    "_blank"
+                  )
+                }
+              >
                 Ajuda
               </DropdownItem>
               <DropdownItem

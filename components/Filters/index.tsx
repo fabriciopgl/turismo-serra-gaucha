@@ -1,34 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { FaFilter } from "react-icons/fa";
-import { usePlacesContext } from "@/contexts/PlacesContext"; // Importando o context
+import { usePlacesContext } from "@/contexts/PlacesContext";
 
 interface FilterProps {
   className?: string; // Permite passar className como prop
 }
 
 const Filter: React.FC<FilterProps> = ({ className }) => {
-  const [selectedType, setSelectedType] = useState<string>(""); // Estado para o tipo selecionado
-  const { places, setFilteredPlaces } = usePlacesContext(); // Acessa o context
+  const [selectedType, setSelectedType] = useState<string>("");
+  const [selectedVisibility, setSelectedVisibility] = useState<string>("");
+  const { places, setFilteredPlaces } = usePlacesContext();
 
-  // Função que será chamada quando o filtro de tipo mudar
-  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleTypeFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setSelectedType(value);
   };
 
-  // Filtra os lugares com base no tipo selecionado
+  // Função que será chamada quando o filtro de visibilidade mudar
+  const handleVisibilityFilterChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const value = e.target.value;
+    setSelectedVisibility(value);
+  };
+
   useEffect(() => {
-    if (selectedType === "") {
-      setFilteredPlaces(places); // Se nenhum tipo for selecionado, mostra todos
-    } else {
-      const filtered = places.filter((place) =>
+    let filtered = places;
+
+    if (selectedType) {
+      filtered = filtered.filter((place) =>
         place.type.includes(
           selectedType as "restaurant" | "atraction" | "route"
         )
       );
-      setFilteredPlaces(filtered);
     }
-  }, [selectedType, places, setFilteredPlaces]);
+
+    if (selectedVisibility) {
+      filtered = filtered.filter(
+        (place) => place.popularity === selectedVisibility
+      );
+    }
+
+    setFilteredPlaces(filtered);
+  }, [selectedType, selectedVisibility, places, setFilteredPlaces]);
 
   return (
     <div className={`${className}`}>
@@ -36,13 +50,12 @@ const Filter: React.FC<FilterProps> = ({ className }) => {
         <FaFilter /> Filtros
       </h2>
 
-      {/* Filtro de tipo */}
       <div>
         <label className="block mb-2">Tipo:</label>
         <select
           className="block w-full p-2 border rounded"
           value={selectedType}
-          onChange={handleFilterChange}
+          onChange={handleTypeFilterChange}
         >
           <option value="">Todos</option>
           <option value="restaurant">Restaurantes</option>
@@ -52,7 +65,10 @@ const Filter: React.FC<FilterProps> = ({ className }) => {
 
         <div className="mt-4">
           <label className="block mb-2">Visibilidade:</label>
-          <select className="block w-full p-2 border rounded">
+          <select
+            className="block w-full p-2 border rounded"
+            onChange={handleVisibilityFilterChange}
+          >
             <option value="">Todas</option>
             <option value="alta">Muito conhecido</option>
             <option value="media">Conhecido na região</option>
