@@ -11,6 +11,7 @@ import { FaSearch } from "react-icons/fa";
 
 export default function FavoritesPage() {
   const [searchValue, setSearchValue] = useState("");
+  const [favoritesFetched, setFavoritesFetched] = useState(false);
 
   const { user, isAnonymous } = useAuth();
   const {
@@ -25,11 +26,15 @@ export default function FavoritesPage() {
     isLoading: favoritesLoading,
   } = useFavorites();
 
+  // Fetch favorites only once if user is logged in and not anonymous
   useEffect(() => {
-    if (favorites.length === 0 && user && !isAnonymous)
+    if (user && !isAnonymous && !favoritesFetched) {
       fetchFavorites(user?.internalId);
-  }, [favorites, fetchFavorites, isAnonymous, user]);
+      setFavoritesFetched(true);
+    }
+  }, [user, isAnonymous, fetchFavorites, favoritesFetched]);
 
+  // Search logic
   useEffect(() => {
     const removeAccents = (str: string) => {
       return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -105,12 +110,13 @@ export default function FavoritesPage() {
 
         {!favoritesLoading &&
           !placesLoading &&
-          userFavoritePlaces.length === 0 &&
-          !isAnonymous && (
+          userFavoritePlaces.length === 0 && (
             <div className="flex justify-center items-center mt-4">
               <Card>
                 <CardBody className="flex flex-row justify-center items-center gap-2">
-                  Nenhum resultado encontrado, tente pesquisar novamente{" "}
+                  {isAnonymous
+                    ? "Você não tem nenhum favorito."
+                    : "Nenhum resultado encontrado, tente pesquisar novamente"}{" "}
                   <FaSearch />
                 </CardBody>
               </Card>
