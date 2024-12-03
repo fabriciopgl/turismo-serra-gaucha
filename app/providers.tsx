@@ -1,6 +1,7 @@
 "use client";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { FavoriteProvider } from "@/contexts/FavoritePlacesContext";
+import { LoggerProvider } from "@/contexts/LogContext";
 import { PlacesProvider } from "@/contexts/PlacesContext";
 import { NextUIProvider } from "@nextui-org/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
@@ -31,7 +32,9 @@ const Providers: React.FC<ProvidersProps> = ({ children, themeProps }) => {
       <NextThemesProvider disableTransitionOnChange {...themeProps}>
         <AuthProvider>
           <FavoriteProvider>
-            <PlacesProvider>{children}</PlacesProvider>
+            <PlacesProvider>
+              <LoggerProvider>{children}</LoggerProvider>
+            </PlacesProvider>
           </FavoriteProvider>
         </AuthProvider>
       </NextThemesProvider>
